@@ -54,7 +54,6 @@ fn main() {
     let mut f = File::new_with_data("file.txt", &f_data);
 
     let mut buffer: Vec<u8> = vec![];
-
     f = open(f).unwrap();
     let f_length = f.read(&mut buffer).unwrap();
     f = close(f).unwrap();
