@@ -1,8 +1,7 @@
-use rand::prelude::*;
+#![allow(dead_code)]
 
-fn one_in(denominator: u32) -> bool {
-    thread_rng().gen_ratio(1, denominator)
-}
+use std::fmt;
+use std::fmt::Display;
 
 #[derive(Debug, PartialEq)]
 enum FileState {
@@ -15,6 +14,21 @@ struct File {
     name: String,
     data: Vec<u8>,
     state: FileState,
+}
+
+impl Display for FileState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            FileState::Open => write!(f, "OPEN"),
+            FileState::Closed => write!(f, "CLOSED"),
+        }
+    }
+}
+
+impl Display for File {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "<{} ({})", self.name, self.state)
+    }
 }
 
 impl File {
@@ -64,12 +78,8 @@ fn main() {
     }
 
     f = open(f).unwrap();
-    let f_length = f.read(&mut buffer).unwrap();
     f = close(f).unwrap();
 
-    let text = String::from_utf8_lossy(&buffer);
-
     println!("{:?}", f);
-    println!("{} is {} bytes long", f.name, f_length);
-    println!("{}", text);
+    println!("{}", f);
 }
